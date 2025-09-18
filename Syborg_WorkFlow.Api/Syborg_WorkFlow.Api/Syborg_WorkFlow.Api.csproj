@@ -10,4 +10,10 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="SqlHelpers">
+      <HintPath>..\SqlHelpers\bin\Debug\net8.0\SqlHelpers.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
