@@ -1,0 +1,21 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Workflow/Workflow/.vs
+/.vs
+/Workflow/Workflow/Workflow/obj/Debug/net9.0
+/Workflow/WorkFlow.Api/.vs
+/Workflow/WorkFlow.Api/WorkFlow.Api/obj/Debug/net9.0
+/Workflow/WorkFlow.Api/WorkFlow.Infrastructure/obj/Debug/net9.0
+/Workflow/WorkFlow.Api/WorkFlow.Infrastructure/obj
+/Workflow/WorkFlow.Api/WorkFlow.Core/obj/Debug/net9.0
+/Workflow/WorkFlow.Api/WorkFlow.Core/obj
+/Workflow/WorkFlow.Api/WorkFlow.Api/obj
+/Workflow/Workflow/Workflow/obj
+/Syborg_WorkFlow.Api/.vs/Syborg_WorkFlow.Api
+/Syborg_WorkFlow.Api/Syborg_WorkFlow.Api/obj
+/Syborg_WorkFlow.Api/Syborg_WorkFlow.Core/obj/Debug/net9.0
+/Syborg_WorkFlow.Api/Syborg_WorkFlow.Core/obj
+/Syborg_WorkFlow.Api/Syborg_Workflow.Infrastructure/obj/Debug/net9.0
+/Syborg_WorkFlow.Api/Syborg_Workflow.Infrastructure/obj
