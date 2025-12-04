@@ -106,7 +106,7 @@ namespace Syborg_WorkFlow.Api.Repositories
             GetAllWorkflowStep? step = null;
 
             using var conn = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand("Sp_GetAllWorkflowSteps", conn)
+            using var cmd = new SqlCommand("Sp_GetWorkflowStepById", conn)
             {
                 CommandType = CommandType.StoredProcedure
             };
