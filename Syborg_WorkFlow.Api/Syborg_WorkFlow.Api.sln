@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syborg_WorkFlow.Api", "Syborg_WorkFlow.Api\Syborg_WorkFlow.Api.csproj", "{F2F7E503-5B85-4D65-AC0C-4F404A91B99F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syborg_WorkFlow.Core", "Syborg_WorkFlow.Core\Syborg_WorkFlow.Core.csproj", "{9E3843EF-30FD-4E01-8AF0-19B1AE6A2F87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syborg_Workflow.Infrastructure", "Syborg_Workflow.Infrastructure\Syborg_Workflow.Infrastructure.csproj", "{2762301E-5922-43EC-A1D4-E309FFB1B950}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V1UserRegistrationWebCRUD", "C:\Users\Ravikumar\source\repos\V1UserRegistrationWebCRUD\V1UserRegistrationWebCRUD\V1UserRegistrationWebCRUD.csproj", "{E373F20E-5297-360A-ACA7-0DA932722CA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{2762301E-5922-43EC-A1D4-E309FFB1B950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2762301E-5922-43EC-A1D4-E309FFB1B950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2762301E-5922-43EC-A1D4-E309FFB1B950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E373F20E-5297-360A-ACA7-0DA932722CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E373F20E-5297-360A-ACA7-0DA932722CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E373F20E-5297-360A-ACA7-0DA932722CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E373F20E-5297-360A-ACA7-0DA932722CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -24,3 +24,16 @@ D:\syborg_development\EnterpriseApp\SqlHelpers\obj\Debug\net8.0\SqlHelpers.dll
 D:\syborg_development\EnterpriseApp\SqlHelpers\obj\Debug\net8.0\refint\SqlHelpers.dll
 D:\syborg_development\EnterpriseApp\SqlHelpers\obj\Debug\net8.0\SqlHelpers.pdb
 D:\syborg_development\EnterpriseApp\SqlHelpers\obj\Debug\net8.0\ref\SqlHelpers.dll
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\bin\Debug\net8.0\SqlHelpers.deps.json
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\bin\Debug\net8.0\SqlHelpers.dll
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\bin\Debug\net8.0\SqlHelpers.pdb
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.csproj.AssemblyReference.cache
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.GeneratedMSBuildEditorConfig.editorconfig
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.AssemblyInfoInputs.cache
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.AssemblyInfo.cs
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.csproj.CoreCompileInputs.cache
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.sourcelink.json
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.dll
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\refint\SqlHelpers.dll
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\SqlHelpers.pdb
+D:\SyborgWorkFlow\Syborg_WorkFlow.Api\SqlHelpers\obj\Debug\net8.0\ref\SqlHelpers.dll

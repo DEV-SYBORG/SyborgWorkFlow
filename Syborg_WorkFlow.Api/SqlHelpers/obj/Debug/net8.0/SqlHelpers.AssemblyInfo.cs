@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SqlHelpers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ec005d95b88f284246cf6f91260fd6b7bb793fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c7529a157ef54fccb3887ba8c9790c85a46c704")]
 [assembly: System.Reflection.AssemblyProductAttribute("SqlHelpers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SqlHelpers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
