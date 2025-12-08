@@ -1,6 +1,6 @@
-﻿namespace Syborg_WorkFlow.Api.ServiceModel
+﻿namespace Syborg_WorkFlow.Api.EnterpriseSolutionModel
 {
-    public class ApplicationPage
+    public class ApplicationListDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

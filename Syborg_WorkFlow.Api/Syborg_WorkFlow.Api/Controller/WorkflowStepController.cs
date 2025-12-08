@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Syborg_WorkFlow.Api.Model;
 using Syborg_WorkFlow.Api.Model.Syborg_WorkFlow.Api.Model;
 using Syborg_WorkFlow.Api.Repositories;
@@ -54,7 +55,7 @@ namespace Syborg_WorkFlow.Api.Controllers
             }
         }
 
-        [HttpGet("GetAllWorkflows")]
+        [HttpGet("GetAllWorkflowStep")]
         public async Task<IActionResult> GetAllWorkflows()
         {
             try
@@ -146,6 +147,34 @@ namespace Syborg_WorkFlow.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "Error fetching workflowSteps.", Details = ex.Message });
+            }
+        }
+
+        [HttpDelete("Delete/{workflowStepId}")]
+        public async Task<IActionResult> DeleteWorkflowStep(Guid workflowStepId)
+        {
+            if (workflowStepId == Guid.Empty)
+                return BadRequest(new { Success = false, Message = "Invalid workflowStepId." });
+
+            try
+            {
+                // dummy user id 
+                var updatedBy = "11111111-1111-1111-1111-111111111111";
+
+
+                await _repository.DeleteWorkflowStepAsync(workflowStepId, Guid.Parse(updatedBy));
+
+                return Ok(new { Success = true, Message = "WorkflowStep deleted successfully." });
+            }
+            catch (SqlException ex) when (ex.Number == 50000)
+            {
+
+                return NotFound(new { Success = false, Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new { Success = false, Message = "Error deleting WorkflowStep.", Details = ex.Message });
             }
         }
 

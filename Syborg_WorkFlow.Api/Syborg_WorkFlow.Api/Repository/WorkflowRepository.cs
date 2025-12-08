@@ -210,7 +210,7 @@ namespace Syborg_WorkFlow.Api.Repositories
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@Workflow_Id", workflowId);
+                    command.Parameters.AddWithValue("@WorkflowStep_Id", workflowId);
                     command.Parameters.AddWithValue("@Updated_By", updatedBy);
 
                     await connection.OpenAsync();
@@ -218,6 +218,5 @@ namespace Syborg_WorkFlow.Api.Repositories
                 }
             }
         }
-
     }
 }

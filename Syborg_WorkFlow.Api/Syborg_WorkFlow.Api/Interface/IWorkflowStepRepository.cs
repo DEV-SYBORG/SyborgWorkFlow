@@ -11,6 +11,6 @@ namespace Syborg_WorkFlow.Api.Repositories
         Task<GetAllWorkflowStep?> GetWorkflowStepByIdAsync(Guid workflowStepId);
         Task<bool> IsWorkflowStepExistsAsync(Guid workflowStepId);
         Task UpdateWorkflowStepAsync(WorkflowStep step);
-
+        Task DeleteWorkflowStepAsync(Guid workflowStepId, Guid user_Id);
     }
 }

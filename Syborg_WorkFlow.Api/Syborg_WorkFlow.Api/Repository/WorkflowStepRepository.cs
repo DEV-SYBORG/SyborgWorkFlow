@@ -184,5 +184,22 @@ namespace Syborg_WorkFlow.Api.Repositories
             await cmd.ExecuteNonQueryAsync();
         }
 
+
+        public async Task DeleteWorkflowStepAsync(Guid workflowStepId, Guid updatedBy)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                using (var command = new SqlCommand("Sp_DeleteWorkflowStep", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@WorkflowStep_Id", workflowStepId);
+                    command.Parameters.AddWithValue("@Updated_By", updatedBy);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
     }
 }
