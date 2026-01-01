@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Syborg_Workflow.Infrastructure/1.0.0": {
+        "runtime": {
+          "Syborg_Workflow.Infrastructure.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Syborg_Workflow.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

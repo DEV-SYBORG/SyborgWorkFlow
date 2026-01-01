@@ -119,7 +119,6 @@ namespace Syborg_WorkFlow.Api.Service
 
             if (!response.IsSuccessStatusCode)
             {
-                // Server gave 404 → return null instead of throwing exception
                 return null;
             }
 
@@ -129,20 +128,31 @@ namespace Syborg_WorkFlow.Api.Service
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<List<RoleList>> GetRoleListAsync()
+        public async Task<List<RoleList>> GetRoleListByApplicationIdAsync(Guid? applicationId)
         {
-            var url = "https://localhost:7013/api/Role/GetRoleList";
+            string url;
+
+            if (!applicationId.HasValue || applicationId == Guid.Empty)
+            {
+                url = "https://localhost:7013/api/Role/GetRoleListByApplicationId";
+            }
+            else
+            {
+                url = $"https://localhost:7013/api/Role/GetRoleListByApplicationId?applicationId={applicationId}";
+            }
 
             var response = await _httpClient.GetStringAsync(url);
 
-            var role = JsonSerializer.Deserialize<List<RoleList>>(response,
+            var roles = JsonSerializer.Deserialize<List<RoleList>>(response,
                 new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-            return role;
+            return roles ?? new List<RoleList>();
         }
+
+
     }
 
 }

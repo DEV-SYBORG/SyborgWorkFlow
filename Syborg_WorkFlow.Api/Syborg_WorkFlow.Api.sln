@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syborg_WorkFlow.Core", "Syb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syborg_Workflow.Infrastructure", "Syborg_Workflow.Infrastructure\Syborg_Workflow.Infrastructure.csproj", "{2762301E-5922-43EC-A1D4-E309FFB1B950}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workflow_UnitTest", "Workflow_UnitTest\Workflow_UnitTest.csproj", "{3C1688A3-B28D-4B71-84A3-C72E25810364}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2762301E-5922-43EC-A1D4-E309FFB1B950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2762301E-5922-43EC-A1D4-E309FFB1B950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2762301E-5922-43EC-A1D4-E309FFB1B950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C1688A3-B28D-4B71-84A3-C72E25810364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C1688A3-B28D-4B71-84A3-C72E25810364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C1688A3-B28D-4B71-84A3-C72E25810364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C1688A3-B28D-4B71-84A3-C72E25810364}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Syborg_WorkFlow.Api.Model;
-using Syborg_WorkFlow.Api.Model.Syborg_WorkFlow.Api.Model;
 using Syborg_WorkFlow.Api.Repositories;
-using Syborg_WorkFlow.Api.Service;
 
 namespace Syborg_WorkFlow.Api.Controllers
 {
@@ -12,10 +10,10 @@ namespace Syborg_WorkFlow.Api.Controllers
     [Route("api/[controller]")]
     public class WorkflowStepController : ControllerBase
     {
-        private readonly WorkflowStepRepository _repository;
+        private readonly IWorkflowStepRepository _repository;
         private readonly IValidator<WorkflowStep> _validator;
 
-        public WorkflowStepController(WorkflowStepRepository repository, IValidator<WorkflowStep> validator)
+        public WorkflowStepController(IWorkflowStepRepository repository, IValidator<WorkflowStep> validator)
         {
             _repository = repository;
             _validator = validator;
@@ -56,16 +54,16 @@ namespace Syborg_WorkFlow.Api.Controllers
         }
 
         [HttpGet("GetAllWorkflowStep")]
-        public async Task<IActionResult> GetAllWorkflows()
+        public async Task<IActionResult> GetAllWorkflowSteps()
         {
             try
             {
-                var workflows = await _repository.GetAllWorkflowStepsAsync();
-                return Ok(workflows);
+                var Step = await _repository.GetAllWorkflowStepsAsync();
+                return Ok(Step);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "Error fetching workflows.", Details = ex.Message });
+                return StatusCode(500, new { Message = "Error fetching workflow Step.", Details = ex.Message });
             }
         }
 
@@ -110,37 +108,45 @@ namespace Syborg_WorkFlow.Api.Controllers
         }
 
 
-        [HttpPut("UpdateWorkflowStep")]
-        public async Task<IActionResult> UpdateWorkflowStep([FromBody] WorkflowStep step)
+        [HttpPut("UpdateWorkflowStep/{workflowStepId}")]
+        public async Task<IActionResult> UpdateWorkflowStep(Guid workflowStepId, [FromBody] WorkflowStep step)
         {
+            if (workflowStepId == Guid.Empty)  // 00000000-0000-0000-0000-000000000000
+                return BadRequest(new { Message = "Invalid Workflow Step Id." });
+
             if (step == null)
-            {
                 return BadRequest(new { Message = "Request body is missing or invalid JSON format." });
-            }
 
-            var validationResult = await _validator.ValidateAsync(step);
-            if (!validationResult.IsValid)
+            if (step.WorkflowStep_Id != Guid.Empty && step.WorkflowStep_Id != workflowStepId)
+                return BadRequest(new { Message = "URL Workflow Step ID and body Workflow Step Id do not match." });
+
+            step.WorkflowStep_Id = workflowStepId;
+
+            bool exists = await _repository.IsWorkflowStepExistsAsync(step.WorkflowStep_Id);
+
+            if (!exists)
             {
-                var errors = validationResult.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.Select(e => e.ErrorMessage).ToArray()
-                    );
-
-                return BadRequest(errors);
+                return NotFound(new
+                {
+                    Message = "Workflow Step Id not found or record is deleted."
+                });
             }
+
             try
             {
-                bool exists = await _repository.IsWorkflowStepExistsAsync(step.WorkflowStep_Id);
-
-                if (!exists)
+                var validationResult = await _validator.ValidateAsync(step);
+                if (!validationResult.IsValid)
                 {
-                    return NotFound(new
-                    {
-                        Message = "Workflow Step Id not found or record is deleted."
-                    });
+                    var errors = validationResult.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.Select(e => e.ErrorMessage).ToArray()
+                        );
+
+                    return BadRequest(errors);
                 }
+
                 await _repository.UpdateWorkflowStepAsync(step);
                 return Ok(new { Message = "Workflow Step updated successfully." });
             }
@@ -161,19 +167,16 @@ namespace Syborg_WorkFlow.Api.Controllers
                 // dummy user id 
                 var updatedBy = "11111111-1111-1111-1111-111111111111";
 
-
                 await _repository.DeleteWorkflowStepAsync(workflowStepId, Guid.Parse(updatedBy));
 
                 return Ok(new { Success = true, Message = "WorkflowStep deleted successfully." });
             }
             catch (SqlException ex) when (ex.Number == 50000)
             {
-
                 return NotFound(new { Success = false, Message = ex.Message });
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, new { Success = false, Message = "Error deleting WorkflowStep.", Details = ex.Message });
             }
         }

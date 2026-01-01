@@ -1,6 +1,4 @@
 ﻿using Syborg_WorkFlow.Api.Model;
-using System;
-using System.Threading.Tasks;
 
 namespace Syborg_WorkFlow.Api.Repositories
 {
@@ -10,8 +8,8 @@ namespace Syborg_WorkFlow.Api.Repositories
         Task CreateWorkflowAsync(Workflow workflow);
         Task<bool> IsWorkflowIdExistsAsync(Guid workflowId);
         Task UpdateWorkflowAsync(Workflow workflow);
-        Task<List<GetAllWorkflow>> GetAllWorkflowsAsync();
-        Task<List<WorkflowListDto>> GetWorkflowListAsync();
+        Task<List<GetAllWorkflow>> GetAllWorkflowsByApplicationIdAsync(Guid? applicationId);
+        Task<List<WorkflowListDto>> GetWorkflowListByApplicationIdAsync(Guid? applicationId);
         Task<GetAllWorkflow?> GetWorkflowByIdAsync(Guid workflowId);
         Task DeleteWorkflowAsync(Guid workflowId, Guid updatedBy);
     }

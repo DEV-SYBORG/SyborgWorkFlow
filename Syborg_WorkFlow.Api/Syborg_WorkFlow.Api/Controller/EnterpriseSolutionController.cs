@@ -139,17 +139,25 @@ namespace Syborg_WorkFlow.Api.Controller
         }
 
 
-        [HttpGet("GetRoleListList")]
-        public async Task<IActionResult> GetRoleList()
+        [HttpGet("GetRoleListByApplicationId")]
+        public async Task<IActionResult> GetRoleListByApplicationId([FromQuery] Guid? applicationId)
         {
             try
             {
-                var sections = await _enterpriseService.GetRoleListAsync();
-                return Ok(sections);
+                var roles = await _enterpriseService.GetRoleListByApplicationIdAsync(applicationId);
+
+                if (roles == null || !roles.Any())
+                    return NotFound(new { Message = "No roles found." });
+
+                return Ok(roles);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "Error retrieving page sections.", Details = ex.Message });
+                return StatusCode(500, new
+                {
+                    Message = "Error retrieving roles.",
+                    Details = ex.Message
+                });
             }
         }
     }

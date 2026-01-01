@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Syborg_WorkFlow.Api.Model;
+using System;
 using System.Data;
 
 namespace Syborg_WorkFlow.Api.Repositories
@@ -47,25 +48,37 @@ namespace Syborg_WorkFlow.Api.Repositories
 
             cmd.Parameters.AddWithValue("@Workflow_Name", workflow.Workflow_Name);
             cmd.Parameters.AddWithValue("@Description", workflow.Description ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Application_Id", workflow.Application_Id);
+            cmd.Parameters.AddWithValue("@Module_Id", workflow.Module_Id);
             cmd.Parameters.AddWithValue("@StartingPage_Id", workflow.StartingPage_Id);
-            cmd.Parameters.AddWithValue("@ApplicationPage_Id", workflow.ApplicationPage_Id);
-            cmd.Parameters.AddWithValue("@Created_By", workflow.User_Id);
-            cmd.Parameters.AddWithValue("@Status", workflow.Status);
+            cmd.Parameters.AddWithValue("@User_Id", workflow.User_Id);
+            cmd.Parameters.Add("@Status", SqlDbType.Bit).Value = workflow.Status;
+
 
             await conn.OpenAsync();
             await cmd.ExecuteNonQueryAsync();
         }
 
-        // GetAll Workflow using stored procedure
-        public async Task<List<GetAllWorkflow>> GetAllWorkflowsAsync()
+        // GetAll Workflow and Get All Workflows By Application By Id using stored procedure
+        public async Task<List<GetAllWorkflow>> GetAllWorkflowsByApplicationIdAsync(Guid? applicationId)
         {
             var workflows = new List<GetAllWorkflow>();
 
             using var conn = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand("Sp_GetAllWorkflows", conn)
+            using var cmd = new SqlCommand("Sp_GetAllWorkflowsByApplicationId", conn)
             {
                 CommandType = CommandType.StoredProcedure
             };
+
+            // Guid.Empty OR null → send NULL to SP
+            if (!applicationId.HasValue || applicationId == Guid.Empty)
+            {
+                cmd.Parameters.Add("@Application_Id", SqlDbType.UniqueIdentifier).Value = DBNull.Value;
+            }
+            else
+            {
+                cmd.Parameters.Add("@Application_Id", SqlDbType.UniqueIdentifier).Value = applicationId.Value;
+            }
 
             await conn.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
@@ -77,35 +90,45 @@ namespace Syborg_WorkFlow.Api.Repositories
                     Workflow_Id = reader.GetGuid(reader.GetOrdinal("Workflow_Id")),
                     Workflow_Name = reader["Workflow_Name"]?.ToString(),
                     Description = reader["Description"]?.ToString(),
+                    Application_Id = reader.GetGuid(reader.GetOrdinal("Application_Id")),
+                    Module_Id = reader.GetGuid(reader.GetOrdinal("Module_Id")),
                     StartingPage_Id = reader.GetGuid(reader.GetOrdinal("StartingPage_Id")),
-                    ApplicationPage_Id = reader.GetGuid(reader.GetOrdinal("ApplicationPage_Id")),
                     TimeStamp_Id = reader.GetGuid(reader.GetOrdinal("TimeStamp_Id")),
-                    Status = reader["Status"]?.ToString(), // Active / Inactive
-
+                    Status = reader.GetBoolean(reader.GetOrdinal("Status")),
 
                     Created_By = reader.GetGuid(reader.GetOrdinal("Created_By")),
                     Created_At = reader.GetDateTime(reader.GetOrdinal("Created_At")),
                     Updated_By = reader["Updated_By"] == DBNull.Value ? (Guid?)null : reader.GetGuid(reader.GetOrdinal("Updated_By")),
                     Updated_At = reader["Updated_At"] == DBNull.Value ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("Updated_At")),
-                    Old_Data = reader["Old_Data"]?.ToString(),
-                    Updated_Data = reader["Updated_Data"]?.ToString(),
-                    Update_Status = reader["Update_Status"]?.ToString()
+                    Old_Data = reader["Old_Data"] == DBNull.Value ? null : reader["Old_Data"].ToString(),
+                    Updated_Data = reader["Updated_Data"] == DBNull.Value ? null : reader["Updated_Data"].ToString(),
+                    Update_Status = reader["Update_Status"] == DBNull.Value ? null : reader["Update_Status"].ToString()
                 });
             }
 
             return workflows;
         }
 
-        // Get Workflow List using stored procedure
-        public async Task<List<WorkflowListDto>> GetWorkflowListAsync()
+        // GetAll Workflows List and Get All Workflows List By Application By Id using stored procedure
+        public async Task<List<WorkflowListDto>> GetWorkflowListByApplicationIdAsync(Guid? applicationId)
         {
             var workflows = new List<WorkflowListDto>();
 
             using var conn = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand("Sp_GetWorkflowList", conn)
+            using var cmd = new SqlCommand("Sp_GetWorkflowListByApplication_Id", conn)
             {
                 CommandType = CommandType.StoredProcedure
             };
+
+            // Guid.Empty OR null → send NULL to SP
+            if (!applicationId.HasValue || applicationId == Guid.Empty)
+            {
+                cmd.Parameters.Add("@Application_Id", SqlDbType.UniqueIdentifier).Value = DBNull.Value;
+            }
+            else
+            {
+                cmd.Parameters.Add("@Application_Id", SqlDbType.UniqueIdentifier).Value = applicationId.Value;
+            }
 
             await conn.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
@@ -144,19 +167,22 @@ namespace Syborg_WorkFlow.Api.Repositories
                     Workflow_Id = reader.GetGuid(reader.GetOrdinal("Workflow_Id")),
                     Workflow_Name = reader["Workflow_Name"]?.ToString(),
                     Description = reader["Description"]?.ToString(),
-                    Status = reader["Status"]?.ToString(), // Active / Inactive
+                    Status = reader.GetBoolean(reader.GetOrdinal("Status")),
+                    Application_Id = reader.GetGuid(reader.GetOrdinal("Application_Id")),
+                    Module_Id = reader.GetGuid(reader.GetOrdinal("Module_Id")),
                     StartingPage_Id = reader.GetGuid(reader.GetOrdinal("StartingPage_Id")),
-                    ApplicationPage_Id = reader.GetGuid(reader.GetOrdinal("ApplicationPage_Id")),
                     TimeStamp_Id = reader.GetGuid(reader.GetOrdinal("TimeStamp_Id")),
 
                     Created_By = reader.GetGuid(reader.GetOrdinal("Created_By")),
                     Created_At = reader.GetDateTime(reader.GetOrdinal("Created_At")),
                     Updated_By = reader["Updated_By"] == DBNull.Value ? (Guid?)null : reader.GetGuid(reader.GetOrdinal("Updated_By")),
                     Updated_At = reader["Updated_At"] == DBNull.Value ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("Updated_At")),
-                    Old_Data = reader["Old_Data"]?.ToString(),
-                    Updated_Data = reader["Updated_Data"]?.ToString(),
-                    Update_Status = reader["Update_Status"]?.ToString()
-                };
+
+                    Old_Data = reader["Old_Data"] == DBNull.Value ? null : reader["Old_Data"].ToString(),
+                    Updated_Data = reader["Updated_Data"] == DBNull.Value ? null : reader["Updated_Data"].ToString(),
+                    Update_Status = reader["Update_Status"] == DBNull.Value ? null : reader["Update_Status"].ToString()
+
+                }; ;
             }
 
             return workflow;
@@ -191,14 +217,14 @@ namespace Syborg_WorkFlow.Api.Repositories
             cmd.Parameters.AddWithValue("@Workflow_Id", workflow.Workflow_Id);
             cmd.Parameters.AddWithValue("@Workflow_Name", workflow.Workflow_Name);
             cmd.Parameters.AddWithValue("@Description", workflow.Description ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Application_Id", workflow.Application_Id);
+            cmd.Parameters.AddWithValue("@Module_Id", workflow.Module_Id);
             cmd.Parameters.AddWithValue("@StartingPage_Id", workflow.StartingPage_Id);
-            cmd.Parameters.AddWithValue("@ApplicationPage_Id", workflow.ApplicationPage_Id);
-            cmd.Parameters.AddWithValue("@Updated_By", workflow.User_Id);
-            cmd.Parameters.AddWithValue("@Status", workflow.Status ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@User_Id", workflow.User_Id);
+            cmd.Parameters.Add("@Status", SqlDbType.Bit).Value = workflow.Status;
 
             await conn.OpenAsync();
             await cmd.ExecuteNonQueryAsync();
-
         }
 
         // DeleteWorkflow using stored procedure
@@ -210,8 +236,8 @@ namespace Syborg_WorkFlow.Api.Repositories
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@WorkflowStep_Id", workflowId);
-                    command.Parameters.AddWithValue("@Updated_By", updatedBy);
+                    command.Parameters.AddWithValue("@Workflow_Id", workflowId);
+                    command.Parameters.AddWithValue("@User_Id", updatedBy);
 
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();

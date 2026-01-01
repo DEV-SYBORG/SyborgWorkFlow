@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Syborg_WorkFlow.Api.Interface;
 using Syborg_WorkFlow.Api.Model;
 using Syborg_WorkFlow.Api.Repositories;
+using Syborg_WorkFlow.Api.Repository;
+//using Syborg_WorkFlow.Api.Repository.Syborg_WorkFlow.Api.Repositories;
 using Syborg_WorkFlow.Api.Service;
 using Syborg_WorkFlow.Api.Validators;
 
@@ -20,11 +23,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IWorkflowRepository, WorkflowRepository>();
 builder.Services.AddScoped<IValidator<Workflow>, WorkflowValidator>();
-builder.Services.AddScoped<WorkflowStepRepository>();
+//builder.Services.AddScoped<WorkflowStepRepository>();
+builder.Services.AddScoped<IWorkflowStepRepository, WorkflowStepRepository>();
+builder.Services.AddScoped<IValidator<WorkflowStep>, WorkflowStepValidator>();
+builder.Services.AddScoped<ISetStepRepository, SetStepRepository>();
+builder.Services.AddScoped<IValidator<SetStep>, SetStepValidator>();
 builder.Services.AddScoped<EnterpriseSolutionService>();
 builder.Services.AddHttpClient<EnterpriseSolutionService>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<WorkflowValidator>();
+
 
 var app = builder.Build();
 

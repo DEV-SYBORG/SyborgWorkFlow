@@ -1,5 +1,4 @@
 ﻿using Syborg_WorkFlow.Api.Model;
-using Syborg_WorkFlow.Api.Model.Syborg_WorkFlow.Api.Model;
 
 namespace Syborg_WorkFlow.Api.Repositories
 {

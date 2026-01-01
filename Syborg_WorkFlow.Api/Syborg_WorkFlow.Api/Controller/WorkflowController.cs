@@ -4,10 +4,9 @@ using Microsoft.Data.SqlClient;
 using Syborg_WorkFlow.Api.Model;
 using Syborg_WorkFlow.Api.Repositories;
 
-
 namespace Syborg_WorkFlow.Api.Controllers
 {
-    //[ApiController]
+    [ApiController]
     [Route("api/[controller]")]
     public class WorkflowController : ControllerBase
     {
@@ -23,7 +22,6 @@ namespace Syborg_WorkFlow.Api.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> CreateWorkflow([FromBody] Workflow workflow)
         {
-            // Step 1: Validate input
             if (workflow == null)
             {
                 return BadRequest(new { Message = "Invalid request body or missing JSON data." });
@@ -41,14 +39,12 @@ namespace Syborg_WorkFlow.Api.Controllers
                 return BadRequest(errors);
             }
 
-            // Step 2: Duplicate name check
             bool isNameTaken = await _workflowRepository.IsNameTakenAsync(workflow.Workflow_Name);
             if (isNameTaken)
             {
                 return Conflict(new { Message = "Workflow name already exists. Please choose a different name." });
             }
 
-            // Step 3: Insert workflow
             try
             {
                 await _workflowRepository.CreateWorkflowAsync(workflow);
@@ -60,26 +56,12 @@ namespace Syborg_WorkFlow.Api.Controllers
             }
         }
 
-        [HttpGet("GetAllWorkflows")]
-        public async Task<IActionResult> GetAllWorkflows()
+        [HttpGet("GetAllWorkflowsByApplicationId")]
+        public async Task<IActionResult> GetAllWorkflowsByApplicationId([FromQuery] Guid? applicationId)
         {
             try
             {
-                var workflows = await _workflowRepository.GetAllWorkflowsAsync();
-                return Ok(workflows);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "Error fetching workflows.", Details = ex.Message });
-            }
-        }
-
-        [HttpGet("GetWorkflowList")]
-        public async Task<IActionResult> GetWorkflowList()
-        {
-            try
-            {
-                var workflows = await _workflowRepository.GetWorkflowListAsync();
+                var workflows = await _workflowRepository.GetAllWorkflowsByApplicationIdAsync(applicationId);
 
                 if (workflows == null || !workflows.Any())
                     return NotFound(new { Message = "No workflows found." });
@@ -88,7 +70,29 @@ namespace Syborg_WorkFlow.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "Error fetching workflow list.", Details = ex.Message });
+                return StatusCode(500, new { Message = "Error fetching workflows.", Details = ex.Message });
+            }
+        }
+
+        [HttpGet("GetWorkflowListByApplicationId")]
+        public async Task<IActionResult> GetWorkflowListByApplicationId([FromQuery] Guid? applicationId)
+        {
+            try
+            {
+                var workflows = await _workflowRepository.GetWorkflowListByApplicationIdAsync(applicationId);
+
+                if (workflows == null || !workflows.Any())
+                    return NotFound(new { Message = "No workflows found." });
+
+                return Ok(workflows);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Message = "Error fetching workflow list.",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -113,38 +117,45 @@ namespace Syborg_WorkFlow.Api.Controllers
             }
         }
 
-        [HttpPut("Update")]
-        public async Task<IActionResult> UpdateWorkflow([FromBody] Workflow workflow)
+        [HttpPut("Update/{Workflow_Id}")]
+        public async Task<IActionResult> UpdateWorkflow(Guid Workflow_Id, [FromBody] Workflow workflow)
         {
-            if (workflow == null)
-            {
-                return BadRequest(new { Message = "Request body is missing or invalid JSON format." });
-            }
+            if (Workflow_Id == Guid.Empty)  // 00000000-0000-0000-0000-000000000000
+                return BadRequest(new { Message = "Invalid Workflow Id." });
 
-            var validationResult = await _validator.ValidateAsync(workflow);
-            if (!validationResult.IsValid)
+            if (workflow == null)
+                return BadRequest(new { Message = "Request body is missing or invalid JSON format." });
+
+            if (workflow.Workflow_Id != Guid.Empty && workflow.Workflow_Id != Workflow_Id)
+                return BadRequest(new { Message = "URL Workflow ID and body Workflow Id do not match." });
+
+            workflow.Workflow_Id = Workflow_Id;
+
+            bool exists = await _workflowRepository.IsWorkflowIdExistsAsync(workflow.Workflow_Id);
+            if (!exists)
             {
-                var errors = validationResult.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.Select(e => e.ErrorMessage).ToArray()
-                    );
-                return BadRequest(errors);
+                return NotFound(new { Message = "Workflow Id not found or record has been deleted." });
             }
 
             try
             {
-                bool exists = await _workflowRepository.IsWorkflowIdExistsAsync(workflow.Workflow_Id);
-                if (!exists)
-                {
-                    return NotFound(new { Message = "Workflow Id not found or record has been deleted." });
-                }
-
+                
                 bool nameTaken = await _workflowRepository.IsNameTakenAsync(workflow.Workflow_Name, workflow.Workflow_Id);
                 if (nameTaken)
                 {
                     return Conflict(new { Message = "Workflow name already exists. Please choose a different name." });
+                }
+
+                var validationResult = await _validator.ValidateAsync(workflow);
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.Select(e => e.ErrorMessage).ToArray()
+                        );
+                    return BadRequest(errors);
                 }
 
                 await _workflowRepository.UpdateWorkflowAsync(workflow);

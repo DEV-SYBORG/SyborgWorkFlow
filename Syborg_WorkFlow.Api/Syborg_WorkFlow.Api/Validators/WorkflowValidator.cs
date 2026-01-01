@@ -9,27 +9,33 @@ namespace Syborg_WorkFlow.Api.Validators
         public WorkflowValidator()
         {
             RuleFor(x => x.Workflow_Name)
-                .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithMessage("Name is required.")
-                .MinimumLength(3).WithMessage("Workflow Name must be at least 3 characters.")
-                .MaximumLength(50).WithMessage("Name must not exceed 50 characters.")
-                .Matches(@"^[A-Za-z]+(?: [A-Za-z]+)*$")
-                .WithMessage("Name can only contain letters and single spaces between words.");
+                .NotEmpty().WithMessage("Workflow Name is required and must be at least 2 characters long.")
+                .MinimumLength(2).WithMessage("Workflow Name is required and must be at least 2 characters long.")
+                .MaximumLength(25).WithMessage("Workflow must not exceed 25 characters.");
 
-            
             RuleFor(x => x.Description)
                 .MaximumLength(500).WithMessage("Description must not exceed 500 characters.");
 
-
             RuleFor(x => x.Status)
-                .NotEmpty().WithMessage("Status is required.")
-                .Must(status =>
-                    status.Equals("Active", StringComparison.OrdinalIgnoreCase) ||
-                    status.Equals("Inactive", StringComparison.OrdinalIgnoreCase)
-                )
-                .WithMessage("Status must be either 'Active' or 'Inactive'.");
+                .Must(status => status == true || status == false)
+                .WithMessage("Status is required. Status must be either 'True' or 'False'.");
 
+
+            RuleFor(x => x.Application_Id)
+                .NotEmpty().WithMessage("Application is required.")
+                .Must(id => id != Guid.Empty).WithMessage("Invalid Application GUID.");
+
+            RuleFor(x => x.Module_Id)
+                .NotEmpty().WithMessage("Module is required.")
+                .Must(id => id != Guid.Empty).WithMessage("Invalid Module GUID.");
+
+            RuleFor(x => x.StartingPage_Id)
+                .NotEmpty().WithMessage("Starting Page is required.")
+                .Must(id => id != Guid.Empty).WithMessage("Invalid Starting Page GUID.");
+
+            RuleFor(x => x.User_Id)
+                .NotEmpty().WithMessage("User Name is required.")
+                .Must(id => id != Guid.Empty).WithMessage("Invalid User Name GUID.");
         }
-       
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 namespace Syborg_WorkFlow.Api.Model
 {
@@ -9,10 +8,11 @@ namespace Syborg_WorkFlow.Api.Model
         public string Workflow_Name { get; set; }
         public string Description { get; set; }
 
-        [DefaultValue("Active")]
-        public string Status { get; set; } = "Active";
+        [DefaultValue("true")]
+        public bool Status { get; set; } = true;
+        public Guid Application_Id { get; set; }
+        public Guid Module_Id { get; set; }
         public Guid StartingPage_Id { get; set; }
-        public Guid ApplicationPage_Id { get; set; }
         public Guid User_Id { get; set; }
     }
 
@@ -21,12 +21,13 @@ namespace Syborg_WorkFlow.Api.Model
         public Guid Workflow_Id { get; set; }
         public string Workflow_Name { get; set; }
         public string Description { get; set; }
+        public Guid Application_Id { get; set; }
+        public Guid Module_Id { get; set; }
         public Guid StartingPage_Id { get; set; }
-        public Guid ApplicationPage_Id { get; set; }
         public Guid TimeStamp_Id { get; set; }
 
-        // Active / Inactive status as string
-        public string Status { get; set; } = string.Empty;
+        // True / False status as string
+        public bool? Status { get; set; }
 
         
         public Guid Created_By { get; set; }
